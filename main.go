@@ -14,7 +14,8 @@ import (
 func main() {
 	in := flag.String("in", "", "Input file or directory")
 	out := flag.String("out", "", "Output file or directory")
-	luts := flag.String("luts", "HLG3 for Rec709.cube", "LUTs to apply")
+	luts := flag.String("luts", "pro.cube", "LUTs to apply")
+	eq := flag.String("eq", "", "Equalizer to apply")
 	metadata := flag.Bool("metadata", true, "Copy metadata")
 
 	flag.Parse()
@@ -54,6 +55,10 @@ func main() {
 		var filter []string
 		for _, lut := range strings.Split(*luts, ",") {
 			filter = append(filter, fmt.Sprintf("lut3d=%s", os.TempDir()+lut))
+		}
+
+		if *eq != "" {
+			filter = append(filter, fmt.Sprintf("eq=%s", *eq))
 		}
 
 		cmds := []string{
