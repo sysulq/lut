@@ -14,9 +14,10 @@ import (
 func main() {
 	in := flag.String("in", "", "Input file or directory")
 	out := flag.String("out", "", "Output file or directory")
-	luts := flag.String("luts", "pro.cube", "LUTs to apply")
-	eq := flag.String("eq", "contrast=1:brightness=0:saturation=1", "Equalizer to apply")
+	luts := flag.String("luts", "fix.cube,athena.cube,film.cube", "LUTs to apply")
+	eq := flag.String("eq", "", "Equalizer to apply, example: contrast=1:brightness=0:saturation=1")
 	metadata := flag.Bool("metadata", true, "Copy metadata")
+	heic := flag.Bool("heic", true, "Convert JPT to heic")
 
 	flag.Parse()
 
@@ -76,6 +77,10 @@ func main() {
 
 		return nil
 	}))
+
+	if *heic {
+		lo.Must0(runCmd(fmt.Sprintf("cd %s && magick mogrify -format heic -depth 10 *.JPG", *out)))
+	}
 
 	fmt.Println("finished!")
 }
