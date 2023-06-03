@@ -17,7 +17,8 @@ func main() {
 	luts := flag.String("luts", "fix.cube,athena.cube,film.cube", "LUTs to apply")
 	eq := flag.String("eq", "", "Equalizer to apply, example: contrast=1:brightness=0:saturation=1")
 	metadata := flag.Bool("metadata", true, "Copy metadata")
-	heic := flag.Bool("heic", true, "Convert JPT to heic")
+	sips := flag.Bool("sips", true, "Convert JPT to heic by sips")
+	imagemagick := flag.Bool("imagemagick", false, "Convert JPT to heic by imagemagick")
 
 	flag.Parse()
 
@@ -71,6 +72,11 @@ func main() {
 			cmds = append(cmds, fmt.Sprintf("exiftool -overwrite_original -tagsfromfile %s -all:all %s", path, outFile))
 		}
 
+		if *sips {
+			cmds = append(cmds, fmt.Sprintf("sips -s format heic %s --out %s.heic", outFile, outFile))
+			cmds = append(cmds, fmt.Sprintf("rm %s", outFile))
+		}
+
 		for _, cmd := range cmds {
 			lo.Must0(runCmd(cmd), cmd)
 		}
@@ -78,7 +84,7 @@ func main() {
 		return nil
 	}))
 
-	if *heic {
+	if *imagemagick {
 		lo.Must0(runCmd(fmt.Sprintf("cd %s && magick mogrify -format heic -depth 10 *.JPG", *out)))
 	}
 
