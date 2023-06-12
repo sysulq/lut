@@ -17,8 +17,8 @@ func main() {
 	luts := flag.String("luts", "fix.cube,athena.cube,film.cube", "LUTs to apply")
 	eq := flag.String("eq", "", "Equalizer to apply, example: contrast=1:brightness=0:saturation=1")
 	metadata := flag.Bool("metadata", true, "Copy metadata")
-	sips := flag.Bool("sips", true, "Convert JPT to heic by sips")
-	imagemagick := flag.Bool("imagemagick", false, "Convert JPT to heic by imagemagick")
+	sips := flag.Bool("sips", true, "Convert JPG to heic by sips")
+	imagemagick := flag.Bool("imagemagick", false, "Convert JPG to heic by imagemagick")
 
 	flag.Parse()
 
