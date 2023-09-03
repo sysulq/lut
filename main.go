@@ -14,7 +14,7 @@ import (
 func main() {
 	in := flag.String("in", "", "Input file or directory")
 	out := flag.String("out", "", "Output file or directory")
-	luts := flag.String("luts", "fix.cube,athena.cube,film.cube", "LUTs to apply")
+	luts := flag.String("luts", "", "LUTs to apply")
 	eq := flag.String("eq", "", "Equalizer to apply, example: contrast=1:brightness=0:saturation=1")
 	metadata := flag.Bool("metadata", true, "Copy metadata")
 	sips := flag.Bool("sips", true, "Convert JPG to heic by sips")
@@ -29,11 +29,6 @@ func main() {
 
 	if *in == *out {
 		fmt.Println("input and output cannot be the same")
-		return
-	}
-
-	if *luts == "" {
-		fmt.Println("luts cannot be empty")
 		return
 	}
 
@@ -55,8 +50,12 @@ func main() {
 		outFile := filepath.Join(*out, filepath.Base(path))
 
 		var filter []string
-		for _, lut := range strings.Split(*luts, ",") {
-			filter = append(filter, fmt.Sprintf("lut3d=%s", os.TempDir()+lut))
+		if *luts == "" {
+			filter = append(filter, fmt.Sprintf("lut3d=%s", os.TempDir()+"Neutral A7s3 Sl2sg3c.cube"))
+		} else {
+			for _, lut := range strings.Split(*luts, ",") {
+				filter = append(filter, fmt.Sprintf("lut3d=%s", lut))
+			}
 		}
 
 		if *eq != "" {
