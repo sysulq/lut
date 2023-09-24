@@ -43,6 +43,10 @@ func main() {
 			return nil
 		}
 
+		if !strings.HasSuffix(strings.ToLower(info.Name()), ".jpg") {
+			return nil
+		}
+
 		if strings.HasPrefix(info.Name(), ".") {
 			return nil
 		}
